@@ -1,0 +1,55 @@
+% 1. Hacer interfaz
+% 2. Crear callbacks (funciones)
+
+% En boton 1
+	% 3. Leer imagen 
+	% 4. Convertir imagen a escala de grises
+	% 5. Mostrar imagen en axis (ejes) x 
+		% 5.1 axes(handles.axes1)
+		% 5.2 imshow(imagen)
+		% 5.3 axis off
+
+	% 6. Generar histograma utilizando escala de grises
+	% 7. Mostrar histograma en axis x
+		% 7.1 axes(handles.axes2)
+		% 7.2 bar(histograma) 
+	% 8. Cambiar color de boton 1 x
+		% 8.1 set(handles.button1, 'BackgroundColor', 'b')
+
+% En boton 2
+	% 9. Leer imagen
+	% 10. Convertir imagen a escala de grises
+	% 11. Realizar la equalizacion de la imagen x
+		% 11.1 Necesitamos una imagen convertida a gris
+		% 11.2 Histograma de imagen convertida a gris
+		% 11.3 size(imagen) => [ filas columas] => filas * columnas = total pixeles
+		% 11.4 
+		% probabilidad = zeros(1, 256);
+		% for i = 1:256
+		% 	probabilidad(i) = histograma(i) / total_pixeles;
+		% end
+		% 11.5 Probabilidad acumulada
+		% acumulada = zeros(1, 256);
+		% acumulada(1) = probabilidad(1);
+		% for i = 2:256
+		% 	acumulada(i) = acumulada(i - 1) + probabilidad(i);
+		% end
+		% 11.6 Equalizador
+		equalizador = acumulada * 255;
+		% 11.7 Equalizar la imagen
+		imagen_equalizada = zeros(filas, columnas);
+		for i = 1:filas
+			for j = 1:columnas
+				indice = imagen(i, j) + 1;
+
+				imagen_equalizada(i, j) = equalizador(indice);
+			end
+		end
+		imagen_equalizada = uint8(imagen_equalizada);
+
+
+	% 12. Mostrar imagen equalizada en axis x 
+	% 13. Generar histograma de imagen equalizada 
+	% 14. Mostrar histograma en axis x
+	% 15. Cambiar color de boton 2 x
+
