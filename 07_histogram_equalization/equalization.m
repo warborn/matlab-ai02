@@ -16,7 +16,7 @@ for i = 1:256
 end
 
 % 3. Calculate the CDF
-cfd(1) = pmf(1);
+cdf(1) = pmf(1);
 for i = 2:256
   cdf(i) = cdf(i - 1) + pmf(i);
 end
