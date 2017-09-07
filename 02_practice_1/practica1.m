@@ -33,7 +33,7 @@ f = inv(A)
 C = [5 6 7;11 15 20]
 g = C(1:2,3)
 h = zeros(5,5)
-d = ones(2,3), d .* 2, d * C
+d = ones(2,3), d .* 2, d * transpose(C)
 d .* C
 
 % 3. Graficas
