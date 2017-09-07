@@ -3,7 +3,7 @@ function [ frequencies ] = get_histogram(image)
   [rows cols ~] = size(image);
   for i = 1:rows
     for j = 1:cols
-      index = image(i, i) + 1;
+      index = image(i, j) + 1;
       frequencies(index) = frequencies(index) + 1;
     end
   end
