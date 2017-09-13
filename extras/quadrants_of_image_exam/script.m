@@ -69,9 +69,10 @@ bottom_half = [upper_right bottom_left];
 modified_image = [top_half; bottom_half];
 
 % 8. Show new image
-figure(1),
+figure(1), imshow(image)
+figure(2),
 subplot(1, 3, 1), imshow(image),
 subplot(1, 3, 2), imshow(zoomed_image),
 subplot(1, 3, 3), plot(zoomed_image_histogram)
 
-figure(2), imshow(modified_image)
+figure(3), imshow(modified_image)
