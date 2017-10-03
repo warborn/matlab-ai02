@@ -16,7 +16,7 @@ cover_red_channel  = cover_image(:, :, 1);
 secret_red_channel = secret_image(:, :, 1);
 ```
 
-Each pixel is conformed of eight bits (1 byte). Each byte of the image is a pixel and indicates the gray color (or in this case the red color) of the picture. The bits in the byte are arranged from the most significant bit ...(MSB)... to the least significant bit(LSB). That means MSB value is 128, whereas LBS bit value is 1. 
+Each pixel is conformed of eight bits (1 byte). Each byte of the image is a pixel and indicates the gray color (or in this case the red color) of the picture. The bits in the byte are arranged from the most significant bit ***(MSB)*** to the least significant bit ***(LSB)*** . That means ***MSB*** value is ***128***, whereas ***LSB*** bit value is ***1***. 
 
 3. We need to extract each of the bits from the channel, from the MSB to the LSB:
 
