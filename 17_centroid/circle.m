@@ -1,6 +1,6 @@
 clc, clear all, close all
 
-image = imread('figures.jpg');
+image = imread('figures.png');
 
 [rows, cols, channels] = size(image);
 
@@ -16,7 +16,7 @@ for i = 1:rows
 	end
 end
 
-row_counter = zeros(rows, 1);
+row_counter = zeros(1, rows);
 col_counter = zeros(1, cols);
 for i = 1:rows
 	for j = 1:cols
