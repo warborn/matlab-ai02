@@ -20,7 +20,7 @@ sum_cols = sum(column_counter);
 x = round(sum_rows/pixel);
 y = round(sum_cols/pixel);
 
-edge_image(x-1:x+1, y-1:y+2) = 1;
+edge_image(x-1:x+1, y-1:y+1) = 1;
 
 figure, imshow(edge_image)
 
