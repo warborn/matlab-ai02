@@ -18,3 +18,5 @@ Basic eye-tracker from chile https://github.com/HenrYxZ/eye_tracker
 
 TrackEye, a C++ application that uses haar cascades and other methods for face/eye detection https://www.codeproject.com/Articles/26897/TrackEye-Real-Time-Tracking-Of-Human-Eyes-Using-a
 
+https://github.com/Kotesh81/Gaze-Tracking
+
