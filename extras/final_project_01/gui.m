@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 22-Oct-2017 19:07:22
+% Last Modified by GUIDE v2.5 11-Nov-2017 23:31:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -133,14 +133,76 @@ function faceDetectionButton_Callback(hObject, eventdata, handles)
 
 image = handles.frame;
 faceDetector = vision.CascadeObjectDetector;
-bboxes = step(faceDetector, image);
+bbox = step(faceDetector, image);
 
-if ~ isempty(bboxes)
-  image_faces = insertObjectAnnotation(image, 'rectangle', bboxes, 'Face');
+if ~ isempty(bbox)
+  % image_faces = insertObjectAnnotation(image, 'rectangle', bbox, 'Face');
+  imface = imcrop(image, bbox);
   axes(handles.snapshotAxes);
-  imshow(image_faces);
+  % imshow(image_faces);
+  imshow(imface);
+
+  handles.imface = imface;
+  guidata(hObject, handles);
+end
+
+
+% --- Executes on button press in detectEyeButton.
+function detectEyeButton_Callback(hObject, eventdata, handles)
+% hObject    handle to detectEyeButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+image = handles.imface;
+eyeDetector = vision.CascadeObjectDetector('LeftEyeCART');
+bbox = step(eyeDetector, image);
+[~, loc] = max(bbox(:, 1));
+bbox = bbox(loc, :);
+if ~ isempty(bbox)
+  eyeimage = rgb2gray(imcrop(image, bbox));
+  axes(handles.snapshotAxes);
+  imshow(eyeimage);
+
+  handles.imeye = eyeimage;
+  handles.leye = bbox;
+  guidata(hObject, handles);
 end
 
 function rotate_video(obj, event, himage)
     rot_image = flip(event.Data, 2);
     set(himage, 'cdata', rot_image);
+
+
+% --- Executes on button press in detectGazeButton.
+function detectGazeButton_Callback(hObject, eventdata, handles)
+% hObject    handle to detectGazeButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+bbox = handles.leye;
+image = handles.imface;
+if ~ isempty(bbox)
+  border = 2;
+  x1 = bbox(1);
+  y1 = bbox(2);
+  x2 = x1 + bbox(3);
+  y2 = y1 + bbox(4);
+
+  % horizontal lines
+  image(y1:y1+border, x1:x2, 1) = 255;
+  image(y2-border:y2, x1:x2, 1) = 255;
+  % vertical lines
+  image(y1:y2, x1:x1+border, 1) = 255;
+  image(y1:y2, x2-border:x2, 1) = 255;
+
+  eyeFrame = image(y1:y2, x1:x2, :);
+  [centers, ~] = imfindcircles(eyeFrame,[10 30], 'ObjectPolarity', 'dark', 'Sensitivity', 0.8, 'Method', 'twostage', 'EdgeThreshold', .05);
+
+  if ~ isempty(centers)
+    center = centers(1, :) + [x1, y1];
+    center = round(center);
+    image(center(2) - 1 : center(2) + 1, center(1) - 7 : center(1) + 7, 1) = 255;
+    image(center(2) - 7 : center(2) + 7, center(1) - 1 : center(1) + 1, 1) = 255;
+  end
+
+  axes(handles.snapshotAxes);
+  imshow(image);
+end
