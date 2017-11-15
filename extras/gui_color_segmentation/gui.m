@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 23-Oct-2017 11:20:19
+% Last Modified by GUIDE v2.5 30-Oct-2017 09:55:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -139,3 +139,71 @@ figure, imshow(handles.frame);
 function rotate_video(obj, event, himage)
     rot_image = flip(event.Data, 2);
     set(himage, 'cdata', rot_image);
+
+
+% --- Executes on button press in markButton.
+function markButton_Callback(hObject, eventdata, handles)
+% hObject    handle to markButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+image = handles.image;
+gray_image = rgb2gray(image);
+[rows, cols] = size(gray_image);
+
+[rows, cols, ~] = size(image);
+output = uint8(zeros(rows, cols, 3));
+
+c = 0;
+x = 0;
+for i = 1:rows
+  for j = 1:cols
+    if image(i, j, 1) >= 130 && image(i, j, 2) >= 40 && image(i, j, 3) >= 10 && image(i, j, 1) <= 180 && image(i, j, 2) <= 100 && image(i, j, 3) <= 80
+      % c = c + image(i, j, 1) - 136;
+      % x = x + 1;
+    output(i, j, 1) = image(i, j, 1);
+    output(i, j, 2) = image(i, j, 2);
+    output(i, j, 3) = image(i, j, 3);
+    end
+  end
+end
+% c
+% x
+% figure, imshow(image);
+threshold = imbinarize(rgb2gray(output), 50/255);
+threshold = im_dilation(threshold);
+% figure, imshow(threshold);
+segmented = gray_image(:, :, [1, 1, 1]);
+
+for i = 1:rows
+  for j = 1:cols
+    pixel = threshold(i, j);
+    if(pixel == 1) 
+      segmented(i, j, 1) = 136;
+      segmented(i, j, 2) = 0;
+      segmented(i, j, 3) = 21;
+    end
+  end
+end
+% Show image in axes
+axes(handles.snapshotAxes);
+imshow(segmented);
+% figure, imshow(segmented);
+
+
+% --- Executes on button press in loadButton.
+function loadButton_Callback(hObject, eventdata, handles)
+% hObject    handle to loadButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[filename, pathname] = uigetfile('*.jpg', 'Select an image');
+if ~isequal(filename, 0)
+  image = imread(strcat(pathname, filename));
+
+  % Store image in a property on handles to share it across functions
+  handles.image = image;
+  guidata(hObject, handles);
+
+  % Show image in axes
+  axes(handles.videoAxes);
+  imshow(image);
+end

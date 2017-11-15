@@ -1,6 +1,6 @@
 clc, clear all, close all;
 
-image = imread('cat.jpg');
+image = imread('test.jpg');
 gray_image = rgb2gray(image);
 [rows, cols] = size(gray_image);
 
